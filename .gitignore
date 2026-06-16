@@ -1,3 +1,10 @@
 .env
 .idea/
+.python-version
+main.py
+pyproject.toml
+uv.lock
+__pycache__/
+
+.env
 __pycache__/
