@@ -170,7 +170,14 @@ if load_clicked:
                 st.session_state.messages = []
             st.sidebar.success("Video loaded successfully!")
         except Exception as e:
-            st.sidebar.error(str(e))
+            error_msg = str(e)
+            # Displaying custom errors in English
+            if error_msg == "RATE_LIMIT_ERROR":
+                st.sidebar.error("⚠️ You have reached the usage limit for loading video URLs. Please try again in 1 day.")
+            elif error_msg == "NO_TRANSCRIPT_ERROR":
+                st.sidebar.error("❌ No subtitles or transcripts are available for this video. Please try another link.")
+            else:
+                st.sidebar.error(error_msg)
 
 
 # Clear Chat

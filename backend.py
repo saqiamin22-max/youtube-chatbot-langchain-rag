@@ -48,13 +48,20 @@ def get_transcript(video_id):
         return transcript
 
     except Exception as e:
-        raise Exception(
-            f"Transcript fetch failed.\n\n{str(e)}"
-        )
+        error_msg = str(e).lower()
+        # Catching YouTube API rate limit or block issues
+        if "too many requests" in error_msg or "rate limit" in error_msg or "http error 429" in error_msg:
+            raise Exception("RATE_LIMIT_ERROR")
+
+        # Catching videos with disabled or missing transcripts
+        elif "could not find a transcript" in error_msg or "subtitles are disabled" in error_msg:
+            raise Exception("NO_TRANSCRIPT_ERROR")
+
+        else:
+            raise Exception(f"Transcript fetch failed.\n\n{str(e)}")
 
 
 def build_rag_components(youtube_url):
-
     video_id = extract_video_id(youtube_url)
 
     if not video_id:
@@ -110,14 +117,14 @@ Answer:
     )
 
     chain = (
-        RunnableParallel(
-            {
-                "context": retriever | RunnableLambda(format_docs),
-                "question": RunnablePassthrough()
-            }
-        )
-        | prompt
-        | llm
+            RunnableParallel(
+                {
+                    "context": retriever | RunnableLambda(format_docs),
+                    "question": RunnablePassthrough()
+                }
+            )
+            | prompt
+            | llm
     )
 
     return chain
