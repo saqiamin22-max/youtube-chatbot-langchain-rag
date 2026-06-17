@@ -1,0 +1,16 @@
+# Web App Framework
+streamlit>=1.30.0
+
+# LLM & Vector Database Integration
+langchain>=0.1.0
+langchain-core>=0.1.0
+langchain-community>=0.1.0
+langchain-text-splitters>=0.0.1
+langchain-mistralai>=0.1.0
+
+# Vector Storage & Search
+faiss-cpu>=1.7.4
+
+# Data Fetching & Utilities
+youtube-transcript-api>=0.6.2
+python-dotenv>=1.0.0
